@@ -1,0 +1,90 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Skyrise rate card controller",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/{nodeEnv}/webhooks",
+      "variables": {
+        "nodeEnv": {
+          "default": "develop",
+          "description": "Node env  prefix",
+          "enum": ["develop", "stage"]
+        }
+      }
+    },
+    { "url": "/" }
+  ],
+  "paths": {
+    "/deals": {
+      "post": {
+        "operationId": "create",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Deal"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "user records",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Deal": {
+        "type": "object",
+        "properties": {
+          "meta": {
+            "type": "object",
+            "properties": { "action": { "type": "string" }, "object": { "type": "string" } }
+          },
+          "retry": { "type": "number" },
+          "current": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "org_id": {
+                  "type": "object",
+                  "properties": { "name": { "type": "string" } }
+                },
+                "org_name": { "type": "string" },
+                "title": { "type": "string" },
+                "value": { "type": "number" }
+              }
+            }
+          },
+          "previous": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "org_id": {
+                  "type": "object",
+                  "properties": { "name": { "type": "string" } }
+                },
+                "org_name": { "type": "string" },
+                "title": { "type": "string" },
+                "value": { "type": "number" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

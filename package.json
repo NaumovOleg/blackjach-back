@@ -1,0 +1,46 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start-ts-node": "NODE_ENV=develop ts-node -r tsconfig-paths/register src/index.ts",
+    "start:dev": "nodemon   --exec \"yarn start-ts-node\"",
+    "lint": "eslint  \"*/**/*.{js,ts}\"",
+    "build": "tsc",
+    "test": "mocha -r ts-node/register 'tests/**/*.spec.ts'"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.4",
+    "@types/express": "^4.17.17",
+    "@types/http-errors": "^2.0.1",
+    "@types/jest": "^29.4.0",
+    "@types/node": "^18.15.11",
+    "@typescript-eslint/eslint-plugin": "^5.57.1",
+    "@typescript-eslint/parser": "^5.57.1",
+    "chai": "^4.3.7",
+    "eslint": "^8.37.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-import-resolver-typescript": "^3.5.5",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-sonarjs": "^0.19.0",
+    "jest": "^29.5.0",
+    "lint-staged": "^13.2.0",
+    "mocha": "^10.2.0",
+    "nodemon": "^2.0.22",
+    "ts-jest": "^29.0.5",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "http-errors": "^2.0.0",
+    "moment": "^2.29.4",
+    "node-config-ts": "^3.3.1",
+    "picodb": "^1.0.5",
+    "source-map-support": "^0.5.21"
+  }
+}

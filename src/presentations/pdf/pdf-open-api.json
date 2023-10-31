@@ -1,0 +1,61 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Skyrise pdf  controller",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/{nodeEnv}/pdf/api",
+      "variables": {
+        "nodeEnv": {
+          "default": "develop",
+          "description": "Node env  prefix",
+          "enum": ["develop", "stage"]
+        }
+      }
+    },
+    { "url": "/api" }
+  ],
+  "paths": {
+    "/v1/campaign-schedule/{mediaPlanId}": {
+      "get": {
+        "operationId": "getHtmlBuffer",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "mediaPlanId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "byte"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

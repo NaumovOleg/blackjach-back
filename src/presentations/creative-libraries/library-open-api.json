@@ -1,0 +1,68 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Skyrise creative libraries controller",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/{nodeEnv}/creative-libraries/api",
+      "variables": {
+        "nodeEnv": {
+          "default": "develop",
+          "description": "Node env  prefix",
+          "enum": ["develop", "stage"]
+        }
+      }
+    },
+    {
+      "url": "/creative-libraries/api"
+    },
+    { "url": "/api" }
+  ],
+  "paths": {
+    "/v1/{libraryId}": {
+      "get": {
+        "operationId": "getOne",
+        "parameters": [
+          {
+            "name": "libraryId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "library record",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Library"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "components": {
+    "schemas": {
+      "Library": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string" }
+        }
+      }
+    }
+  }
+}

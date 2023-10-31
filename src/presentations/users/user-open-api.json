@@ -1,0 +1,203 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Skyrise user controller",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/{nodeEnv}/users/api",
+      "variables": {
+        "nodeEnv": {
+          "default": "develop",
+          "description": "Node env  prefix",
+          "enum": ["develop", "stage"]
+        }
+      }
+    },
+    { "url": "/api" }
+  ],
+  "paths": {
+    "/v1": {
+      "get": {
+        "security": [{ "bearerAuth": [] }],
+        "operationId": "getOne",
+        "responses": {
+          "200": {
+            "description": "user record",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "security": [{ "bearerAuth": [] }],
+        "operationId": "create",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUser"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "library record",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/list": {
+      "get": {
+        "operationId": "getList",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "number" }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/{userId}": {
+      "put": {
+        "security": [{ "bearerAuth": [] }],
+        "operationId": "update",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "user data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "404": { "description": "media plan not found" }
+        }
+      },
+      "delete": {
+        "security": [{ "bearerAuth": [] }],
+        "operationId": "update",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "404": { "description": "media plan not found" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string" },
+          "firstName": { "type": "string", "minLength": 1 },
+          "lastName": { "type": "string" },
+          "role": {
+            "type": "string",
+            "enum": [
+              "ACCOUNT_MANAGER",
+              "ADMIN",
+              "SUPER_ADMIN",
+              "TRADER",
+              "CUSTOMER",
+              "FINANCE_MANAGER",
+              "LEAD_TRADER"
+            ]
+          }
+        }
+      },
+      "UserResponse": {
+        "allOf": [{ "$ref": "#/components/schemas/User" }, { "properties": { "_id": { "type": "string" } } }]
+      },
+      "CreateUser": {
+        "required": ["email", "role"],
+        "$ref": "#/components/schemas/User"
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

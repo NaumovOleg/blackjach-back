@@ -1,0 +1,123 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "import",
+    "@typescript-eslint",
+    "sonarjs",
+    "prettier"
+  ],
+  "extends": [
+    "airbnb-base",
+    "airbnb-typescript",
+    "plugin:sonarjs/recommended",
+    "prettier"
+  ],
+  "parserOptions": {
+    "project": "./tsconfig.eslint.json"
+  },
+  "rules": {
+    "prettier/prettier": [
+      "error"
+    ],
+    "newline-per-chained-call": 1,
+    "object-curly-newline": 0,
+    "sonarjs/cognitive-complexity": [
+      "error",
+      5
+    ],
+    "@typescript-eslint/no-unused-expressions": [
+      "error",
+      {
+        "allowShortCircuit": true
+      }
+    ],
+    "import/no-extraneous-dependencies": 0,
+    "react/jsx-filename-extension": 0,
+    "import/prefer-default-export": 0,
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "argsIgnorePattern": "_"
+      }
+    ],
+    "comma-spacing": [
+      "error",
+      {
+        "before": false,
+        "after": true
+      }
+    ],
+    "semi-spacing": [
+      "error",
+      {
+        "before": false,
+        "after": true
+      }
+    ],
+    "space-in-parens": [
+      "error",
+      "never"
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "semi": [
+      "error",
+      "always"
+    ],
+    "@typescript-eslint/comma-spacing": [
+      "error",
+      {
+        "before": false,
+        "after": true
+      }
+    ],
+    "@typescript-eslint/type-annotation-spacing": 2,
+    "no-new": 0,
+    "no-param-reassign": [
+      "error",
+      {
+        "props": false
+      }
+    ],
+    "no-plusplus": "off",
+    "no-underscore-dangle": [
+      "error",
+      {
+        "allow": [
+          "_id"
+        ]
+      }
+    ],
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "enumMember",
+        "format": [
+          "UPPER_CASE"
+        ]
+      }
+    ]
+  },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [
+        ".ts",
+        ".tsx"
+      ]
+    },
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true,
+        "project": "./"
+      }
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Skyrise campaign controller",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/{nodeEnv}/campaigns/api",
+      "variables": {
+        "nodeEnv": {
+          "default": "develop",
+          "description": "Node env  prefix",
+          "enum": ["develop", "stage"]
+        }
+      }
+    },
+    { "url": "/api" }
+  ],
+  "paths": {
+    "/v1": {
+      "get": {
+        "operationId": "getList",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "client",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "array", "items": { "type": "string" } }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "campaign list record",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Campaign"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Campaign": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string" },
+          "name": { "type": "string" },
+          "client": { "type": "string" },
+          "totalBudget": { "type": "string" },
+          "campaignId": { "type": "string" }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

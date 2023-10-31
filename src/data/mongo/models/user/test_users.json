@@ -1,0 +1,52 @@
+[
+  {
+    "email": "testcreate2@skyrise.com",
+    "firstName": "Oltest",
+    "role": "ADMIN"
+  },
+  {
+    "email": "patrick@skyri.se",
+    "firstName": "Patrick",
+    "lastName": "Patrick",
+    "role": "SUPER_ADMIN"
+  },
+  {
+    "email": "vladyslav.kalinichenko@techmagic.co",
+    "firstName": "Vlad",
+    "lastName": "Kalinichenko",
+    "role": "SUPER_ADMIN"
+  },
+  {
+    "email": "mariana.lesiv@techmagic.co",
+    "firstName": "Mariana",
+    "role": "SUPER_ADMIN"
+  },
+  {
+    "email": "sean@skyri.se",
+    "firstName": "Sean",
+    "lastName": "Sean",
+    "role": "SUPER_ADMIN"
+  },
+  {
+    "email": "gareth.owen@skyri.se",
+    "firstName": "Gareth",
+    "lastName": "Gareth",
+    "role": "SUPER_ADMIN"
+  },
+  {
+    "email": "engineering@skyri.se",
+    "firstName": "Oleg",
+    "role": "SUPER_ADMIN"
+  },
+  {
+    "email": "test@skyrise.com",
+    "firstName": "Test",
+    "role": "SUPER_ADMIN"
+  },
+  {
+    "email": "valerii.dmytriiev@techmagic.co",
+    "firstName": "Valerii",
+    "lastName": "Dmitriev",
+    "role": "SUPER_ADMIN"
+  }
+]

@@ -1,0 +1,332 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Skyrise media plan controller",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/{nodeEnv}/media-plans/api",
+      "variables": {
+        "nodeEnv": {
+          "default": "develop",
+          "description": "Node env  prefix",
+          "enum": ["develop", "stage"]
+        }
+      }
+    },
+    { "url": "/api" }
+  ],
+  "paths": {
+    "/v1": {
+      "get": {
+        "security": [{ "bearerAuth": [] }],
+        "operationId": "getList",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "number" }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "number" }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "example": "campaign",
+            "schema": {
+              "type": "string",
+              "enum": ["campaign", "client", "status", "manager", "endDate", "startDate", "totalBudget"]
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "required": false,
+            "example": 1,
+            "schema": {
+              "type": "number",
+              "enum": [1, -1]
+            }
+          },
+          {
+            "name": "manager",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "client",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "channel",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "media plan list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/MediaPlanFlatten" }
+                    },
+                    "count": { "type": "number" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "security": [{ "bearerAuth": [] }],
+        "operationId": "create",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MediaPlanCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "media plan list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaPlan"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/{mediaPlanId}": {
+      "delete": {
+        "security": [{ "bearerAuth": [] }],
+        "operationId": "delete",
+        "parameters": [
+          {
+            "name": "mediaPlanId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "deleted media plan",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "mediaPlan": { "$ref": "#/components/schemas/MediaPlan" },
+                    "channels": { "type": "number" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "media plan not found" }
+        }
+      },
+      "get": {
+        "security": [{ "bearerAuth": [] }],
+        "operationId": "get",
+        "parameters": [
+          {
+            "name": "mediaPlanId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "media plan data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/MediaPlanFlatten"
+                    },
+                    {
+                      "properties": {
+                        "impressions": { "type": "number" },
+                        "clicks": { "type": "number" },
+                        "views": { "type": "number" },
+                        "listens": { "type": "number" }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": { "description": "media plan not found" }
+        }
+      },
+      "put": {
+        "security": [{ "bearerAuth": [] }],
+        "operationId": "update",
+        "parameters": [
+          {
+            "name": "mediaPlanId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MediaPlanUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "media plan data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaPlan"
+                }
+              }
+            }
+          },
+          "404": { "description": "media plan not found" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "MediaPlan": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string" },
+          "campaign": { "type": "string" },
+          "client": { "type": "string" },
+          "manager": { "type": "string" },
+          "startDate": { "type": "string" },
+          "endDate": { "type": "string" },
+          "scheduleDate": { "type": "string" },
+          "status": { "type": "string" },
+          "totalBudget": { "type": "number" },
+          "agencyDiscount": { "type": "number" },
+          "margin": { "type": "number" },
+          "tradingDeal": { "type": "number" },
+          "channels": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      },
+      "MediaPlanFlatten": {
+        "allOf": [
+          { "$ref": "#/components/schemas/MediaPlan" },
+          {
+            "properties": {
+              "clients": { "$ref": "#/components/schemas/Client" },
+              "manager": { "$ref": "#/components/schemas/User" },
+              "campaign": { "$ref": "#/components/schemas/Campaign" }
+            }
+          }
+        ]
+      },
+      "Client": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string" },
+          "email": { "type": "string" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string" },
+          "email": { "type": "string" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" }
+        }
+      },
+      "Campaign": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string" },
+          "name": { "type": "string" },
+          "client": { "type": "string" },
+          "totalBudget": { "type": "string" },
+          "campaignId": { "type": "string" }
+        }
+      },
+      "MediaPlanCreate": {
+        "type": "object",
+        "required": ["campaign", "client", "startDate", "endDate", "scheduleDate", "totalBudget"],
+        "properties": {
+          "campaign": { "type": "string" },
+          "client": { "type": "string" },
+          "startDate": { "type": "string", "format": "date" },
+          "endDate": { "type": "string", "format": "date" },
+          "scheduleDate": { "type": "string", "format": "date" },
+          "totalBudget": { "type": "number", "minimum": 1 },
+          "tradingDeal": { "type": "number", "minimum": 0 },
+          "agencyDiscount": { "type": "boolean" }
+        }
+      },
+      "MediaPlanUpdate": {
+        "type": "object",
+        "properties": {
+          "campaign": { "type": "string", "pattern": "^[a-zA-Z0-9_']+( [a-zA-Z0-9_']+)*$" },
+          "client": { "type": "string" },
+          "startDate": { "type": "string", "format": "date" },
+          "endDate": { "type": "string", "format": "date" },
+          "scheduleDate": { "type": "string", "format": "date" },
+          "totalBudget": { "type": "number", "minimum": 1 },
+          "tradingDeal": { "type": "number", "minimum": 1, "nullable": true }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

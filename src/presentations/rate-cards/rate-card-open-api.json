@@ -1,0 +1,314 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Skyrise rate card controller",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/{nodeEnv}/rate-cards/api",
+      "variables": {
+        "nodeEnv": {
+          "default": "develop",
+          "description": "Node env  prefix",
+          "enum": ["develop", "stage"]
+        }
+      }
+    },
+    { "url": "/api" }
+  ],
+  "paths": {
+    "/v1": {
+      "get": {
+        "operationId": "getList",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "number" }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "number" }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "example": "channel",
+            "schema": {
+              "type": "string",
+              "enum": ["channel"]
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "required": false,
+            "example": 1,
+            "schema": { "type": "number", "enum": [1, -1] }
+          },
+          {
+            "name": "channel",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "array", "items": { "type": "string" } }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RateCardResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "create",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RateCardCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "user records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RateCardResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/options": {
+      "get": {
+        "security": [{ "bearerAuth": [] }],
+        "operationId": "getOptions",
+        "parameters": [
+          {
+            "name": "channel",
+            "in": "query",
+            "required": false,
+            "allowReserved": true,
+            "schema": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          {
+            "name": "buyingMetric",
+            "in": "query",
+            "required": false,
+            "allowReserved": true,
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "kpis",
+            "in": "query",
+            "required": false,
+            "allowReserved": true,
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "formats",
+            "in": "query",
+            "required": false,
+            "allowReserved": true,
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "tactic",
+            "in": "query",
+            "required": false,
+            "allowReserved": true,
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "product",
+            "in": "query",
+            "required": false,
+            "allowReserved": true,
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "showDraft",
+            "in": "query",
+            "required": false,
+            "allowReserved": true,
+            "schema": { "type": "boolean" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get channel options",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Options"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/{rateCardId}": {
+      "put": {
+        "operationId": "update",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "rateCardId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RateCard"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "rate cards records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RateCardResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "delete",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "user records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RateCardResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RateCardCreate": {
+        "allOf": [{ "$ref": "#/components/schemas/RateCard" }, { "required": ["channel"] }]
+      },
+      "RateCard": {
+        "type": "object",
+        "properties": {
+          "channel": { "type": "string", "pattern": "^[A-Za-z0-9@#$%^&\\-_ +–=<>()/!*,.?;:]+$" },
+          "product": { "type": "string", "pattern": "^[A-Za-z0-9@#$%^&\\-_ +–=<>()/!*,.?;:]+$" },
+          "buyingMetric": { "type": "string", "enum": ["CPM", "CPV", "CPCV", "FLAT", "DISCLOSED"] },
+          "formats": { "type": "array", "items": { "type": "string" } },
+          "tactic": { "type": "string", "pattern": "^[A-Za-z0-9@#$%^&\\-_ +–=<>()/!*,.?;:]+$" },
+          "monthlySpent": { "type": "number" },
+          "benchmark": { "type": "number" },
+          "kpis": { "type": "array", "items": { "type": "string" } },
+          "costsFee": { "type": "number" },
+          "notes": { "type": "string" },
+          "buyRate": { "type": "number" },
+          "sellRate": { "type": "number" },
+          "isDraft": { "type": "boolean" }
+        }
+      },
+      "RateCardResponse": {
+        "allOf": [
+          { "$ref": "#/components/schemas/RateCard" },
+          { "properties": { "_id": { "type": "string" } } }
+        ]
+      },
+      "Options": {
+        "type": "object",
+        "properties": {
+          "channels": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "kpis": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "products": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "formats": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "tactics": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "sellRates": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "buyingMetrics": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "monthlySpent": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

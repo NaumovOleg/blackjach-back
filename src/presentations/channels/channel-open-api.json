@@ -1,0 +1,347 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Skyrise channel controller",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/{nodeEnv}/channels/api",
+      "variables": {
+        "nodeEnv": {
+          "default": "develop",
+          "description": "Node env prefix",
+          "enum": ["develop", "stage"]
+        }
+      }
+    },
+    { "url": "/api" }
+  ],
+  "paths": {
+    "/v1": {
+      "get": {
+        "security": [{ "bearerAuth": [] }],
+        "operationId": "getList",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "number" }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "number" }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "number" }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "required": false,
+            "example": 1,
+            "schema": {
+              "type": "number",
+              "enum": [1, -1]
+            }
+          },
+          {
+            "name": "mediaPlan",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "media plan list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/Channel" }
+                    },
+                    "count": { "type": "number" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "security": [{ "bearerAuth": [] }],
+        "operationId": "create",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateChannel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "media plan list",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Channel" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/budget": {
+      "get": {
+        "security": [{ "bearerAuth": [] }],
+        "operationId": "getTotalBudget",
+        "parameters": [
+          {
+            "name": "mediaPlan",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "excludeChannel",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get channel options",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/metrics": {
+      "get": {
+        "security": [{ "bearerAuth": [] }],
+        "operationId": "getMetrics",
+        "parameters": [
+          {
+            "name": "mediaPlan",
+            "in": "query",
+            "required": true,
+            "allowReserved": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "buyingMetric",
+            "in": "query",
+            "allowReserved": true,
+            "schema": { "type": "string", "enum": ["CPM", "CPV", "CPCV", "FLAT", "DISCLOSED"] }
+          },
+          {
+            "name": "budget",
+            "in": "query",
+            "allowReserved": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "channel",
+            "in": "query",
+            "allowReserved": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "product",
+            "in": "query",
+            "allowReserved": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "kpi",
+            "in": "query",
+            "allowReserved": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "sellRate",
+            "in": "query",
+            "allowReserved": true,
+            "schema": { "type": "number" }
+          },
+          {
+            "name": "formats",
+            "in": "query",
+            "allowReserved": true,
+            "schema": { "type": "array", "items": { "type": "string" } }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get channel margin",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "marginPercent": { "type": "number" },
+                    "marginAbsolute": { "type": "number" },
+                    "impressions": { "type": "number" },
+                    "clicks": { "type": "number" },
+                    "views": { "type": "number" },
+                    "listens": { "type": "number" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/{channelId}": {
+      "delete": {
+        "security": [{ "bearerAuth": [] }],
+        "operationId": "delete",
+        "parameters": [
+          {
+            "name": "channelId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delete channel",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Channel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "security": [{ "bearerAuth": [] }],
+        "operationId": "update",
+        "parameters": [
+          {
+            "name": "channelId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateChannel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "media plan list",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Channel" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Channel": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string" },
+          "mediaPlan": { "type": "string" },
+          "channel": { "type": "string" },
+          "kpi": { "type": "string" },
+          "targetingDetails": { "type": "string" },
+          "product": { "type": "string" },
+          "format": { "type": "array", "items": { "type": "string" } },
+          "startDate": { "type": "number", "format": "date" },
+          "endDate": { "type": "number", "format": "date" },
+          "buyingMetrics": { "type": "string", "enum": ["CPM", "CPV", "CPCV"] },
+          "sellRate": { "type": "number" },
+          "budget": { "type": "number" },
+          "margin": { "type": "number" },
+          "marginPercent": { "type": "number" },
+          "impressions": { "type": "number" },
+          "views": { "type": "number" },
+          "clicks": { "type": "number" },
+          "listens": { "type": "number" }
+        }
+      },
+      "CreateChannel": {
+        "type": "object",
+        "required": ["mediaPlan", "channel"],
+        "allOf": [
+          { "$ref": "#/components/schemas/UpdateChannel" },
+          { "properties": { "mediaPlan": { "type": "string" } } }
+        ]
+      },
+      "UpdateChannel": {
+        "type": "object",
+        "properties": {
+          "channel": { "type": "string" },
+          "kpi": { "type": "string", "nullable": true },
+          "targetingDetails": { "type": "string", "maxLength": 300, "nullable": true },
+          "product": { "type": "string", "nullable": true },
+          "formats": {
+            "type": "array",
+            "items": { "type": "string" },
+            "nullable": true
+          },
+          "saveAsDraft": { "type": "boolean" },
+          "startDate": { "type": "string", "format": "date", "nullable": true },
+          "endDate": { "type": "string", "format": "date", "nullable": true },
+          "buyingMetrics": {
+            "type": "string",
+            "enum": ["CPM", "CPV", "CPCV", "FLAT", "DISCLOSED"],
+            "nullable": true
+          },
+          "sellRate": { "type": "number", "nullable": true },
+          "budget": { "type": "number", "nullable": true },
+          "poweredBySkyrise": { "type": "boolean" }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
